@@ -1,0 +1,63 @@
+(Tb44/Tb43) > (Tb33/Tb34) = surface
+(Tb44/Tb43) < (Tb33/Tb34) = cloudy/humid
+
+In humid and clearsky conditions:
+AWS 34(43) is lower than 33(44) due to WV absorption.
+Both are above 1.
+But at higher humidities, pairs decouple and AWS34 peaks at a slightly higher altitude.
+Tb33/Tb34 increases
+Tb44/Tb43 < Tb33/Tb34
+
+The closer a channel is to the water vapour line, the more it decouples from its partner at higher humidities. And the group 3 channels tend to move more to higher altitudes than the group 4 channels.
+Therefore, in humid conditions, the group 3 ratio will increase more than the group 4 ratio.
+
+In cloudy and humid conditions:
+The group 4 channels are more impacted by scattering
+AWS44 lower than AWS43 due to scattering. 
+AWS34 lower than AWS33 due to scattering. 
+The group 4 channels are more impacted by scattering than the group 3 channels.
+Since both are less than 1, and Tb44/Tb43 decreases more rapidly than Tb33/Tb34:
+(Tb44/Tb43) < (Tb33/Tb34)
+Eventually flattens out at high tcwv due to saturation.
+
+Cold surface, clearsky, dry:
+AWS 33(44) is lower than 34(43) due to lower peaking channels seeing a cold surface.
+Both less than 1.
+In the presence of a little water vapour, pairs decouple: 34 starts to looks at higher altitudes and is warmer:
+(Tb33/Tb34) decreases more than (Tb44/Tb43).
+(Tb44/Tb43) > (Tb33/Tb34)
+
+So even though the pairs decouple here as we had in the humid, warm conditions, the difference lies in the fact that the ratios are above or below 1.
+
+Would we see the same thing looking at differences rather than ratios? Why would ratios help more than differences, or not?
+
+170 / 190
+
+then increase as both stop seeing surface
+ratio of 44/43 increases to about 1
+
+for 0.3 and [0.3, 0.2]:
+at first: (Tb44/Tb43) > (Tb33/Tb34)
+43 reacts 'more' to presence of wv than 34, sees slightly higher altitude
+switches to (Tb44/Tb43) < (Tb33/Tb34) when none seeing surface (saturation?)
+[0.3, 0.4]:
+quite similar, but do have (Tb44/Tb43) < (Tb33/Tb34)
+group 4 starts off at lower tb, so ???
+
+arctic cloudy:
+quick decrease from 1
+44 lower than 43 - more scattering
+ratio of 44/43 decreases below 1
+at low wv: (Tb44/Tb43) > (Tb33/Tb34)
+at high wv: (Tb44/Tb43) < (Tb33/Tb34)
+
+
+
+(Tb44/Tb43) > (Tb33/Tb34) = good
+44*34 > 33*43
+
+44*34 / 33*43 > 1  = good
+
+44*34 / 33*43 < 1  = bad
+
+basically we're trying to remove cloudy tropical, i think??
