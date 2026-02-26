@@ -60,8 +60,13 @@ def surface_mask(ds, channel, thr_g3=-1, thr_g4=-1, thr_pair=5):
         denom = Tb.sel(n_channels=f"AWS33")*Tb.sel(n_channels=f"AWS43")
         cond3 = (numer / denom) > slope_threshold["AWS33"]
 
+        base = cond1 & cond2 & cond3
+        use_cond4 = np.abs(latitude) < 60
+
+        mask = base & (~use_cond4 | cond4)
+
         # surface impact when all are true
-        mask = cond1 & cond2 & cond3
+        #mask = cond1 & cond2 & cond3
 
         mask_all[channel] = mask
 
@@ -88,7 +93,13 @@ def surface_mask(ds, channel, thr_g3=-1, thr_g4=-1, thr_pair=5):
         cond4 = (numer / denom) > slope_threshold[channel]
 
         # surface impact when all are true
-        mask =  cond1 & cond2 & cond3 & cond4
+
+        base = cond1 & cond2 & cond3
+        use_cond4 = np.abs(latitude) < 60
+
+        mask = base & (~use_cond4 | cond4)
+        
+        #mask =  cond1 & cond2 & cond3 & cond4
         mask_all[channel] = mask
 
         if channel == 35:
@@ -110,8 +121,10 @@ def surface_mask_simulations(ds):
 
     N = ds.number.shape[0]
     mask_all = {channel: np.zeros(N, dtype=bool) for channel in group3_channels} # one column for each model variant
-    cond4_all = {channel: np.zeros(N, dtype=bool) for channel in group3_channels} # for testing
+    #cond4_all = {channel: np.zeros(N, dtype=bool) for channel in group3_channels} # for testing
+    #cond5_all = {channel: np.zeros(N, dtype=bool) for channel in group3_channels} # for testing
 
+    latitude = ds["Latitude"].values
     # add noise to simulations
     #for ch in CHANNELS:
     #    noisy_tb = ds[ch].values + np.random.normal(0, AWS_CHANNEL_NOISE[ch], N)  # or len(ds[ch])
@@ -140,10 +153,13 @@ def surface_mask_simulations(ds):
             cond3 = (numer / denom) > slope_threshold["AWS33"]
 
             # surface impact when all are true
-            mask = cond1 & cond2 & cond3
+            base = cond1 & cond2 & cond3
+            use_cond3 = np.abs(latitude) < 60
+
+            mask = base & (~use_cond3 | cond3)
 
             mask_all[channel] = mask
-            cond4_all[channel] = cond3
+            #cond4_all[channel] = cond3
 
 
         elif channel in [33, 34, 35]:
@@ -180,12 +196,19 @@ def surface_mask_simulations(ds):
             #slope = (numer / (denom))
             #cond4 = slope <= 1
             cond4 = (numer / denom) > slope_threshold[f"AWS{channel}"]
+            #cond5 = dTa_pair < 10
             #cond4 = (Tb44/Tb43) > (Tb33/Tb34)
 
             # surface impact when all are true
-            mask = cond1 & cond2 & cond3
+            base = cond1 & cond2 & cond3
+            use_cond4 = np.abs(latitude) < 60
+
+            mask = base & (~use_cond4 | cond4)
+            #mask_2 = base & (~use_cond4 | cond5)
+
             mask_all[channel] = mask
-            cond4_all[channel] = cond4
+            #cond4_all[channel] = cond4
+            #cond5_all[channel] = cond5
 
             if channel == 35:
                 mask_all[36] = mask
@@ -201,4 +224,4 @@ def surface_mask_simulations(ds):
         #   (False | True)  -> True
         #   (True  | True)  -> True
 
-    return mask_all, cond4_all
+    return mask_all
