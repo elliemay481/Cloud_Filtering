@@ -200,7 +200,7 @@ def surface_mask_simulations(ds):
             #cond4 = (Tb44/Tb43) > (Tb33/Tb34)
 
             # surface impact when all are true
-            base = cond1 & cond2 & cond3
+            base = cond1 & cond2
             use_cond4 = np.abs(latitude) < 60
 
             mask = base & (~use_cond4 | cond4)

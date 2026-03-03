@@ -125,7 +125,7 @@ def predict_quantiles(x, quantnn, quantiles):
     return y_quantiles
 
 
-def run_batch(x, start, end, output_variables, y_quantiles, y_mean):
+def run_batch(x, start, end, output_variables, y_quantiles, y_mean, mrnn):
     y_pred_quantiles = predict_quantiles(x[start:end], mrnn, config.QUANTILES)
 
     for var in output_variables:
@@ -176,12 +176,12 @@ if __name__ == "__main__":
         for start in range(0, int(N_samples), int(batch_size)):
             end = int(min(start + batch_size, N_samples))
 
-            y_quantiles, y_mean = run_batch(x_test_np, start, end, output_variables, y_quantiles, y_mean)
+            y_quantiles, y_mean = run_batch(x_test_np, start, end, output_variables, y_quantiles, y_mean, mrnn)
 
         ds_retrievals = create_dataset_of_retrievals(config.AWS_TEST_SET, input_variables, output_variables, tag, y_quantiles, y_mean, y_test, x_test, N_samples, surface_mask)
 
         today = datetime.today().strftime("%Y%m%d")
-        out_path = config.DATA_DIR / f"cloud_signal_test_set_retrievals_{tag}_{today}.nc"
+        out_path = config.DATA_DIR / f"cloud_signal_test_set_retrievals_{tag}_{today}_all_data.nc"
         ds_retrievals.to_netcdf(out_path)
         print(f"Saved: {out_path}")
 

@@ -148,7 +148,7 @@ AWS_CHANNEL_NOISE = {
 }
 
 
-MODEL_DATE = "20260302"
+MODEL_DATE = "20260303"
 MODELS = {
     "aws31_36": {
         "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws31_36_{MODEL_DATE}.pt",
