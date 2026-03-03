@@ -2,10 +2,11 @@
 import pickle
 import numpy as np
 import torch
+from datetime import datetime
 from pathlib import Path
 
 from quantnn.mrnn import MRNN
-from toolbox.models.ICINN import AWS_CF_Model
+from QRNN_model import CloudSignalModel_MultiOutput
 from quantnn.mrnn import Quantiles
 
 import config as config
@@ -35,7 +36,7 @@ def train_variant(tag, surface_masks_training, surface_masks_validation):
         dropped_channel_ids.append(config.CHANNEL_IDS[ch])
 
     # create dataset with relevant channels, scale variables, and prep for pytorch
-    training_loader, validation_loader, scalers = retrieval_preprocessing.prepare_data(tag, input_variables, output_variables, 
+    training_loader, validation_loader, scalers = retrieval_preprocessing.prep_for_training(tag, input_variables, output_variables, 
         surface_masks_training, surface_masks_validation
     )
 
@@ -44,7 +45,7 @@ def train_variant(tag, surface_masks_training, surface_masks_validation):
 
 
     
-    model = AWS_CF_Model(
+    model = CloudSignalModel_MultiOutput(
         n_inputs=len(input_variables),
         n_outputs=n_quantile_outputs,
         **config.MODEL
@@ -80,10 +81,10 @@ def train_variant(tag, surface_masks_training, surface_masks_validation):
             sigma_noise=sigma_noise,
         )
 
-        today = datetime.today().strftime("%Y%m%d")
+    today = datetime.today().strftime("%Y%m%d")
 
-    model_path  = Path(str(config.MODEL_TEMPLATE).format(tag=tag))
-    scaler_path = Path(str(config.SCALER_TEMPLATE).format(tag=tag))
+    model_path  = Path(str(config.MODEL_TEMPLATE).format(tag=tag, today=today))
+    scaler_path = Path(str(config.SCALER_TEMPLATE).format(tag=tag, today=today))
 
     model_path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), model_path)

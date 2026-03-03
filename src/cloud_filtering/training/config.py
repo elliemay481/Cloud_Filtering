@@ -5,8 +5,8 @@ from datetime import datetime
 
 SEED = 0
 
-#DATA_DIR = Path("/cephyr/users/maye/Vera/data/AWS/")
-DATA_DIR = Path("/home/eleanor/Documents/Research/PHD/DataStorage/AWS/")
+DATA_DIR = Path("/cephyr/users/maye/Vera/data/AWS/")
+#DATA_DIR = Path("/home/eleanor/Documents/Research/PHD/DataStorage/AWS/")
 
 # Where trained models/scalers go
 MODEL_DIR = Path("/cephyr/users/maye/Vera/data/models/cloud_signal/")
@@ -15,10 +15,9 @@ today = datetime.today().strftime("%Y%m%d")
 MODEL_TEMPLATE   = MODEL_DIR / "MRNN_AWS_cloudsignal_{tag}_{today}.pt"
 SCALER_TEMPLATE  = MODEL_DIR / "MRNN_AWS_cloudsignal_scalers_{tag}_{today}.pkl"
 
-# pre-divided training set? probably yes
-AWS_TRAINING_SET = DATA_DIR / "aws_database_2025-11-10_training.nc"
-AWS_VALIDATION_SET = DATA_DIR / "aws_database_2025-11-10_validation.nc"
-AWS_TEST_SET = DATA_DIR / "aws_database_2025-11-10_test.nc"
+AWS_TRAINING_SET = DATA_DIR / "aws_database_2026-02-27_training.nc"
+AWS_VALIDATION_SET = DATA_DIR / "aws_database_2026-02-27_validation.nc"
+AWS_TEST_SET = DATA_DIR / "aws_database_2026-02-27_test.nc"
 
 
 
@@ -85,7 +84,7 @@ def get_output_variables(tag):
     drop = set(VARIANTS[tag])
     outputs = []
     for var in BASE_OUTPUT_VARIABLES:
-        var_allsky = f"CloudSignal_AWS{var[-2:]}"
+        var_allsky = f"Ta_Allsky_AWS{var[-2:]}"
         if var_allsky not in drop:
             outputs.append(var)
 
@@ -127,8 +126,8 @@ MODEL = {
 # -------------------------------------------------
 
 TRAINING_STAGES = [
-    {"lr": 1e-2, "epochs": 10},
-    {"lr": 1e-3, "epochs": 10},
+    {"lr": 1e-2, "epochs": 5},
+#    {"lr": 1e-3, "epochs": 10},
 ]
 
 BATCH_SIZE = 512
@@ -149,36 +148,36 @@ AWS_CHANNEL_NOISE = {
 }
 
 
-
+MODEL_DATE = "20260302"
 MODELS = {
     "aws31_36": {
-        "path_model":   MODEL_DIR / "MRNN_AWS_model_aws31_36_2025-11-26.pt",
+        "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws31_36_{MODEL_DATE}.pt",
         "md5_model":    "8f206334d81f959226035bf9dfd8743d",
-        "path_scalers": MODEL_DIR / "MRNN_AWS_scalers_aws31_36_2025-11-26.pkl",
+        "path_scalers": MODEL_DIR / f"MRNN_AWS_cloudsignal_scalers_aws31_36_{MODEL_DATE}.pkl",
         "md5_scalers":  "5e9d7f6a69815554c4dadfdf6465ec62",
     },
     "aws32_36": {
-        "path_model":   MODEL_DIR / "MRNN_AWS_model_aws32_36_2025-11-26.pt",
+        "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws32_36_{MODEL_DATE}.pt",
         "md5_model":    "....",
-        "path_scalers": MODEL_DIR / "MRNN_AWS_scalers_aws32_36_2025-11-26.pkl",
+        "path_scalers": MODEL_DIR / f"MRNN_AWS_cloudsignal_scalers_aws32_36_{MODEL_DATE}.pkl",
         "md5_scalers":  "....",
     },
     "aws33_36": {
-        "path_model":   MODEL_DIR / "MRNN_AWS_model_aws33_36_2025-11-26.pt",
+        "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws33_36_{MODEL_DATE}.pt",
         "md5_model":    "....",
-        "path_scalers": MODEL_DIR / "MRNN_AWS_scalers_aws33_36_2025-11-26.pkl",
+        "path_scalers": MODEL_DIR / f"MRNN_AWS_cloudsignal_scalers_aws33_36_{MODEL_DATE}.pkl",
         "md5_scalers":  "....",
     },
     "aws34_36": {
-        "path_model":   MODEL_DIR / "MRNN_AWS_model_aws34_36_2025-11-26.pt",
+        "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws34_36_{MODEL_DATE}.pt",
         "md5_model":    "....",
-        "path_scalers": MODEL_DIR / "MRNN_AWS_scalers_aws34_36_2025-11-26.pkl",
+        "path_scalers": MODEL_DIR / f"MRNN_AWS_cloudsignal_scalers_aws34_36_{MODEL_DATE}.pkl",
         "md5_scalers":  "....",
     },
     "aws35_36": {
-        "path_model":   MODEL_DIR / "MRNN_AWS_model_aws35_36_2025-11-26.pt",
+        "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws35_36_{MODEL_DATE}.pt",
         "md5_model":    "....",
-        "path_scalers": MODEL_DIR / "MRNN_AWS_scalers_aws35_36_2025-11-26.pkl",
+        "path_scalers": MODEL_DIR / f"MRNN_AWS_cloudsignal_scalers_aws35_36_{MODEL_DATE}.pkl",
         "md5_scalers":  "....",
     },
 }

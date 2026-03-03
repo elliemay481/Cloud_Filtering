@@ -60,12 +60,12 @@ def surface_filtering(filename) -> xr.Dataset:
 
     surface_masks = surface_mask_simulations(ds)
 
-    m31 = surface_masks["31"]
-    m32 = surface_masks["32"]
-    m33 = surface_masks["33"]
-    m34 = surface_masks["34"]
-    m35 = surface_masks["35"]
-    m36 = surface_masks["36"]
+    m31 = surface_masks[31]
+    m32 = surface_masks[32]
+    m33 = surface_masks[33]
+    m34 = surface_masks[34]
+    m35 = surface_masks[35]
+    m36 = surface_masks[36]
 
     model_mask_variants = {
         "aws31_36": (~m32),
@@ -100,8 +100,8 @@ def scale_x(x, train=True, scalers=None):
 
     return x, scalers
 
-def prepare_data(tag, filename, input_variables, output_variables, surface_masks, train=True):
-
+def prepare_data(tag, filename, input_variables, output_variables, surface_masks, train=True, scalers=None):
+    #print(filename)
     ds = xr.open_dataset(filename)
 
     # select relevant surface mask
@@ -113,10 +113,12 @@ def prepare_data(tag, filename, input_variables, output_variables, surface_masks
     for var in output_variables:
         channel_id = var[-2:]
         cloud_signal = ds[f"Ta_Clearsky_AWS{channel_id}"] - ds[f"Ta_Allsky_AWS{channel_id}"]
-        y[var] = cloud_signal.values[train]
+        #y[var] = cloud_signal.values[mask]
+        y[var] = cloud_signal.values
 
     for var in input_variables:
-        x[var] = ds[var].values[mask]
+       # x[var] = ds[var].values[mask]
+        x[var] = ds[var].values
 
     x, scalers = scale_x(x, train=train, scalers=scalers)
 
@@ -125,9 +127,10 @@ def prepare_data(tag, filename, input_variables, output_variables, surface_masks
     return x, y, scalers, mask
 
 def prep_for_training(tag, input_variables, output_variables, surface_masks_training, surface_masks_validation):
-
+    print(f"filename: {config.AWS_TRAINING_SET}")
     x_train, y_train, scalers, _ = prepare_data(tag, config.AWS_TRAINING_SET, input_variables, output_variables, surface_masks_training, train=True, scalers=None)
-    x_val, y_val, _ = prepare_data(tag, config.AWS_VALIDATION_SET, input_variables, output_variables, surface_masks_validation, train=False, scalers=scalers)
+    print(f"filename: {config.AWS_VALIDATION_SET}")
+    x_val, y_val, _, _ = prepare_data(tag, config.AWS_VALIDATION_SET, input_variables, output_variables, surface_masks_validation, train=False, scalers=scalers)
 
     # prepare for pytorch
     x_train = np.vstack(list(x_train.values())).T
