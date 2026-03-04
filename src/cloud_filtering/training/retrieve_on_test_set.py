@@ -82,7 +82,7 @@ def create_dataset_of_retrievals(filename, input_variables, output_variables, ta
     ds_out["Longitude"] = xr.DataArray(ds["Longitude"][mask], dims=("number",))
     ds_out["CloudSat_Datetime"] = xr.DataArray(ds["CloudSat_Datetime"][mask], dims=("number",))
     ds_out["Fwp"] = xr.DataArray(ds["Fwp"][mask], dims=("number",))
-    ds_out["H2O_Column"] = xr.DataArray(ds["H2O_Column"][mask], dims=("number",))
+    #ds_out["H2O_Column"] = xr.DataArray(ds["H2O_Column"][mask], dims=("number",))
 
     for var in input_variables:
         ds_out[var] = xr.DataArray(x_test[var], dims=("number",))
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     np.random.seed(config.SEED)
     torch.manual_seed(config.SEED)
 
-    surface_masks_test = retrieval_preprocessing.surface_filtering(filename=config.AWS_TEST_SET)
+    surface_masks_test = retrieval_preprocessing.surface_mask(filename=config.AWS_TEST_SET)
 
     for tag in config.VARIANTS.keys():
         print("-------")

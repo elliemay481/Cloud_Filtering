@@ -50,9 +50,7 @@ def create_dataloader(x_data, y_data, y_labels, batch_size, shuffle):
 
 def surface_filtering(filename) -> xr.Dataset:
     """
-    Keep only samples where all required channels are NOT surface impacted.
-
-    dropped_channel_ids: channel (ids) that must be "clean" (mask False) for this model.
+    Creates datasets for training, centre and neighbouring channels not masked.
     """
     #if not dropped_channel_ids:
     #    return ds
@@ -76,6 +74,35 @@ def surface_filtering(filename) -> xr.Dataset:
     }
 
     return model_mask_variants
+
+
+def surface_mask(filename) -> xr.Dataset:
+    """
+    Keep only samples where all required channels are NOT surface impacted.
+    """
+    #if not dropped_channel_ids:
+    #    return ds
+    ds = xr.open_dataset(filename)
+
+    surface_masks = surface_mask_simulations(ds)
+
+    m31 = surface_masks[31]
+    m32 = surface_masks[32]
+    m33 = surface_masks[33]
+    m34 = surface_masks[34]
+    m35 = surface_masks[35]
+    m36 = surface_masks[36]
+
+    model_mask_variants = {
+        "aws31_36": (~m31),
+        "aws32_36": (~m32),
+        "aws33_36": (~m33),
+        "aws34_36": (~m34),
+        "aws35_36": (~m35),
+    }
+
+    return model_mask_variants
+
 
 def scale_x(x, train=True, scalers=None):
 
