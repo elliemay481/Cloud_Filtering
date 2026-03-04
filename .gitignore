@@ -1,3 +1,4 @@
+src/cloud_filtering/training/__pycache__/
 .ipynb_checkpoints/
 figures/
 *.nc

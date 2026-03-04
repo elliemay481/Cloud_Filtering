@@ -60,10 +60,10 @@ def surface_mask(ds, channel, thr_g3=-1, thr_g4=-1, thr_pair=15):
         denom = Tb.sel(n_channels=f"AWS33")*Tb.sel(n_channels=f"AWS43")
         cond3 = (numer / denom) > slope_threshold["AWS33"]
 
-        base = cond1 & cond2 & cond3
-        use_cond4 = np.abs(latitude) < 60
+        base = cond1 & cond2
+        use_cond3 = np.abs(latitude) < 60
 
-        mask = base & (~use_cond4 | cond4)
+        mask = base & (~use_cond3 | cond3)
 
         # surface impact when all are true
         #mask = cond1 & cond2 & cond3
@@ -153,7 +153,7 @@ def surface_mask_simulations(ds):
             cond3 = (numer / denom) > slope_threshold["AWS33"]
 
             # surface impact when all are true
-            base = cond1 & cond2 & cond3
+            base = cond1 & cond2
             use_cond3 = np.abs(latitude) < 60
 
             mask = base & (~use_cond3 | cond3)

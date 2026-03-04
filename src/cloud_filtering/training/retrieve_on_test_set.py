@@ -123,9 +123,9 @@ def predict_quantiles(x, quantnn, quantiles):
 
     y_pred = quantnn.predict(x)
 
-    y_quantiles = quantnn.posterior_quantiles(y_pred=y_pred, quantiles=quantiles)
+    y_pred_quantiles = quantnn.posterior_quantiles(y_pred=y_pred, quantiles=quantiles)
 
-    return y_quantiles
+    return y_pred_quantiles
 
 
 def run_batch(x, start, end, output_variables, y_quantiles, y_mean, mrnn):
