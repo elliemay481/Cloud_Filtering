@@ -68,6 +68,8 @@ def create_dataset_of_retrievals(filename, input_variables, output_variables, ta
 
     ds = xr.open_dataset(filename)
 
+    # mask = np.ones(ds["Latitude"].shape[0], dtype=bool)  without surface masking
+
     ds_out = xr.Dataset(
         coords={
             "number": np.arange(N_samples),
@@ -80,6 +82,7 @@ def create_dataset_of_retrievals(filename, input_variables, output_variables, ta
     ds_out["Longitude"] = xr.DataArray(ds["Longitude"][mask], dims=("number",))
     ds_out["CloudSat_Datetime"] = xr.DataArray(ds["CloudSat_Datetime"][mask], dims=("number",))
     ds_out["Fwp"] = xr.DataArray(ds["Fwp"][mask], dims=("number",))
+    ds_out["H2O_Column"] = xr.DataArray(ds["H2O_Column"][mask], dims=("number",))
 
     for var in input_variables:
         ds_out[var] = xr.DataArray(x_test[var], dims=("number",))
@@ -181,7 +184,7 @@ if __name__ == "__main__":
         ds_retrievals = create_dataset_of_retrievals(config.AWS_TEST_SET, input_variables, output_variables, tag, y_quantiles, y_mean, y_test, x_test, N_samples, surface_mask)
 
         today = datetime.today().strftime("%Y%m%d")
-        out_path = config.DATA_DIR / f"cloud_signal_test_set_retrievals_{tag}_{today}_all_data.nc"
+        out_path = config.DATA_DIR / f"cloud_signal_test_set_retrievals_{tag}_{today}.nc"
         ds_retrievals.to_netcdf(out_path)
         print(f"Saved: {out_path}")
 

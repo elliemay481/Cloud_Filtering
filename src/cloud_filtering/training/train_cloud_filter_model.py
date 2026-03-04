@@ -101,4 +101,6 @@ if __name__ == "__main__":
     surface_masks_validation = retrieval_preprocessing.surface_filtering(filename=config.AWS_VALIDATION_SET)
 
     for tag in config.VARIANTS.keys():
+        if tag == "aws31_36":
+            continue
         train_variant(tag, surface_masks_training, surface_masks_validation)

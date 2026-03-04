@@ -116,8 +116,8 @@ QUANTILES = np.linspace(0.01, 0.99, N_QUANTS)
 # -------------------------------------------------
 
 MODEL = {
-    "n_layers": 2,
-    "width": 8,
+    "n_layers": 12,
+    "width": 512,
     "batch_norm": True,
 }
 
@@ -126,7 +126,7 @@ MODEL = {
 # -------------------------------------------------
 
 TRAINING_STAGES = [
-    {"lr": 1e-2, "epochs": 5},
+    {"lr": 1e-2, "epochs": 30},
 #    {"lr": 1e-3, "epochs": 10},
 ]
 
@@ -148,7 +148,7 @@ AWS_CHANNEL_NOISE = {
 }
 
 
-MODEL_DATE = "20260303"
+MODEL_DATE = "20260304"
 MODELS = {
     "aws31_36": {
         "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws31_36_{MODEL_DATE}.pt",

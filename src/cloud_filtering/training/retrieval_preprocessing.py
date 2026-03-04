@@ -113,12 +113,12 @@ def prepare_data(tag, filename, input_variables, output_variables, surface_masks
     for var in output_variables:
         channel_id = var[-2:]
         cloud_signal = ds[f"Ta_Clearsky_AWS{channel_id}"] - ds[f"Ta_Allsky_AWS{channel_id}"]
-        #y[var] = cloud_signal.values[mask]
-        y[var] = cloud_signal.values
+        y[var] = cloud_signal.values[mask]
+        #y[var] = cloud_signal.values  # without surface masking
 
     for var in input_variables:
-       # x[var] = ds[var].values[mask]
-        x[var] = ds[var].values
+        x[var] = ds[var].values[mask]
+        #x[var] = ds[var].values    # without surface masking
 
     x, scalers = scale_x(x, train=train, scalers=scalers)
 
