@@ -134,6 +134,7 @@ BATCH_SIZE = 512
 DEVICE = "cpu"
 ADVERSARIAL_TRAINING = 0.05
 
+"""
 AWS_CHANNEL_NOISE = {
     "Ta_Allsky_AWS31": 0.6,
     "Ta_Allsky_AWS32": 0.7,
@@ -146,9 +147,23 @@ AWS_CHANNEL_NOISE = {
     "Ta_Allsky_AWS43": 1.2,
     "Ta_Allsky_AWS44": 1.0,
 }
+"""
+
+AWS_CHANNEL_NOISE = {
+    "Ta_Allsky_AWS31": 0.36,
+    "Ta_Allsky_AWS32": 0.50,
+    "Ta_Allsky_AWS33": 0.56,
+    "Ta_Allsky_AWS34": 0.79,
+    "Ta_Allsky_AWS35": 0.84,
+    "Ta_Allsky_AWS36": 1.0,
+    "Ta_Allsky_AWS41": 1.60,
+    "Ta_Allsky_AWS42": 1.53,
+    "Ta_Allsky_AWS43": 1.05,
+    "Ta_Allsky_AWS44": 0.91,
+}
 
 
-MODEL_DATE = "20260304"
+MODEL_DATE = "20260307"
 MODELS = {
     "aws31_36": {
         "path_model":   MODEL_DIR / f"MRNN_AWS_cloudsignal_aws31_36_{MODEL_DATE}.pt",

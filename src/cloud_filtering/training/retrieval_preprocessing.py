@@ -95,10 +95,10 @@ def surface_mask(filename) -> xr.Dataset:
 
     model_mask_variants = {
         "aws31_36": (~m31),
-        "aws32_36": (~m32),
-        "aws33_36": (~m33),
-        "aws34_36": (~m34),
-        "aws35_36": (~m35),
+        "aws32_36": (m31 & ~m32),
+        "aws33_36": (m32 & ~m33),
+        "aws34_36": (m33 & ~m34),
+        "aws35_36": (m34 & ~m35),
     }
 
     return model_mask_variants
