@@ -177,7 +177,7 @@ def surface_mask(ds):
 
     return mask_all
 
-
+"""
 def surface_mask_tmp(ds):
 
     Tb = ds.tb
@@ -276,6 +276,7 @@ def surface_mask_tmp(ds):
             mask_all[ch] = mask_all[ch]
 
         return mask_all
+"""
 
 
 def surface_mask_simulations(ds):
@@ -367,7 +368,7 @@ def surface_mask_simulations(ds):
             denom = (
                 ds[f"Ta_Allsky_AWS{channel}"].values * ds[f"Ta_Allsky_AWS{g4_2}"].values
             )
-            cond4 = (numer / denom) > slope_threshold[f"AWS{channel}"]
+            cond4 = (numer / denom) >= slope_threshold[f"AWS{channel}"]
 
             # surface impact when all are true
             base = cond1 & cond2 & cond3
