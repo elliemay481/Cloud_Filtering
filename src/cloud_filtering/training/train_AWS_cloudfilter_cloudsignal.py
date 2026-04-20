@@ -22,7 +22,7 @@ from toolbox import utils
 
 np.random.seed(0)
 AWS_channel_noise = np.array([0.6, 0.7, 0.7, 1, 1, 1.3, 1.7, 1.4, 1.2, 1])
-#AWS_channel_noise = np.zeros(10)
+# AWS_channel_noise = np.zeros(10)
 
 n_channels = 11
 
@@ -30,8 +30,8 @@ n_channels = 11
 data_directory = "/cephyr/users/maye/Vera/data/AWS/"
 train_data_path = data_directory + "aws_train_dataset_new_120825.pkl"
 val_data_path = data_directory + "aws_validate_dataset_new_120825.pkl"
-#training_data = utils.load_processed_data(train_data_path)
-#validation_data = utils.load_processed_data(val_data_path)
+# training_data = utils.load_processed_data(train_data_path)
+# validation_data = utils.load_processed_data(val_data_path)
 with open(train_data_path, "rb") as f:
     training_data = pickle.load(f)
 with open(val_data_path, "rb") as f:
@@ -78,7 +78,8 @@ n_quantile_outputs = {
     "CloudSignal_AWS41": n_quants,
     "CloudSignal_AWS42": n_quants,
     "CloudSignal_AWS43": n_quants,
-    "CloudSignal_AWS44": n_quants}
+    "CloudSignal_AWS44": n_quants,
+}
 
 losses = {
     "CloudSignal_AWS31": Quantiles(np.linspace(0.01, 0.99, n_quants)),
@@ -107,8 +108,8 @@ training_loader, validation_loader, scalers = retrieval_functions.prepare_traini
 model = ICIModel_MultiOutput(
     n_inputs=n_inputs,
     n_outputs=n_quantile_outputs,
-#    n_layers=12,
-#    width=512,
+    #    n_layers=12,
+    #    width=512,
     n_layers=2,
     width=8,
     batch_norm=True,
@@ -192,5 +193,8 @@ model.load_state_dict(torch.load(model_path))
 model.eval()
 
 # save the scalers for predictions
-with open("/cephyr/users/maye/Vera/data/models/MRNN_AWS_cloudfilterscalers_cloudsignal_smallmodel.pkl", "wb") as f:
+with open(
+    "/cephyr/users/maye/Vera/data/models/MRNN_AWS_cloudfilterscalers_cloudsignal_smallmodel.pkl",
+    "wb",
+) as f:
     pickle.dump(scalers, f)

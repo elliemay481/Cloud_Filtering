@@ -2,12 +2,14 @@
 
 Machine learning model for AWS cloud signal retrievals
 """
+
 from torch import nn
 
 from quantnn.models.pytorch.encoders import SpatialEncoder
 from quantnn.models.pytorch.decoders import SpatialDecoder
 from quantnn.models.pytorch.fully_connected import MLP, FullyConnectedBlock
-#import quantnn.models.pytorch.torchvision as blocks
+
+# import quantnn.models.pytorch.torchvision as blocks
 from torch import nn
 import torch
 from quantnn.models.pytorch.common import PytorchModel, activations
@@ -69,19 +71,19 @@ class CloudSignalModel(PytorchModel, nn.Module):
                     n_in = 2 * n_out + n_inputs
             else:
                 n_in = n_out
-        
+
         # Modify to output two sets of quantiles
         modules.append(nn.Linear(n_in, sum(n_outputs)))
 
         self.mods = nn.ModuleList(modules)
-        
+
         self.n_variables = len(n_outputs)
 
     def forward(self, x):
         """Propagate input through network."""
 
         y_p = []
-        y_l = self.mods[0](x) # run input through first layer
+        y_l = self.mods[0](x)  # run input through first layer
 
         for layer in self.mods[1:]:
             if self.skips:
@@ -97,7 +99,7 @@ class CloudSignalModel(PytorchModel, nn.Module):
             out = y_l
 
         return out
-    
+
 
 class CloudSignalModel_MultiOutput(nn.Module):
     def __init__(
@@ -109,7 +111,7 @@ class CloudSignalModel_MultiOutput(nn.Module):
         activation=nn.ReLU,
         batch_norm=False,
         skip_connections=False,
-        threshold=1e-6  # Small threshold to decide if Dm profile should be predicted
+        threshold=1e-6,  # Small threshold to decide if Dm profile should be predicted
     ):
         """
         Create a fully-connect neural network model with multiple
@@ -129,7 +131,7 @@ class CloudSignalModel_MultiOutput(nn.Module):
         self.threshold = threshold
 
         self.skips = skip_connections
-        
+
         super().__init__()
         nn.Module.__init__(self)
 
@@ -158,23 +160,27 @@ class CloudSignalModel_MultiOutput(nn.Module):
             else:
                 n_in = n_out
 
-
         # Set up the output heads (layers diverge)
         self.heads = nn.ModuleDict()
-        for name, output_size in n_outputs.items():  # n outputs needs to be a dict here!
-            head_layers = nn.ModuleList([
-                nn.Linear(n_in, width),
-                activation(),
-                nn.BatchNorm1d(width) if batch_norm else nn.Identity(),
-                nn.Linear(width, output_size)
-            ])
+        for (
+            name,
+            output_size,
+        ) in n_outputs.items():  # n outputs needs to be a dict here!
+            head_layers = nn.ModuleList(
+                [
+                    nn.Linear(n_in, width),
+                    activation(),
+                    nn.BatchNorm1d(width) if batch_norm else nn.Identity(),
+                    nn.Linear(width, output_size),
+                ]
+            )
             self.heads[name] = head_layers
 
     def forward(self, x):
         """Propagate input through network."""
-        #print(x.shape)
+        # print(x.shape)
         y_p = []
-        y_l = self.shared_layers[0](x) # run input through first layer
+        y_l = self.shared_layers[0](x)  # run input through first layer
 
         # run through shared layers
         for layer in self.shared_layers[1:]:
@@ -183,19 +189,18 @@ class CloudSignalModel_MultiOutput(nn.Module):
                 y_p = [y_l]
             else:
                 y = y_l
-                #print(y.shape)
-            y_l = layer(y)   # torch.Size([256, 512])
-        
-        #print(y_l.shape)
+                # print(y.shape)
+            y_l = layer(y)  # torch.Size([256, 512])
+
+        # print(y_l.shape)
 
         # Pass the shared output through each output head
         outputs = {}
         for name, layers in self.heads.items():
-            y = y_l # take output from shared layers
+            y = y_l  # take output from shared layers
             for layer in layers:
-                #print(layer)
+                # print(layer)
                 y = layer(y)
             outputs[name] = y
-
 
         return outputs
